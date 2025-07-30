@@ -7,14 +7,15 @@ RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
 # Copy Maven wrapper and pom.xml
 COPY mvnw .
+COPY mvnw.cmd .
 COPY .mvn .mvn
 COPY pom.xml .
 
 # Make mvnw executable
 RUN chmod +x ./mvnw
 
-# Download dependencies
-RUN ./mvnw dependency:go-offline -B
+# Download dependencies (with retry logic)
+RUN ./mvnw dependency:go-offline -B || ./mvnw dependency:resolve -B
 
 # Copy source code
 COPY src ./src
