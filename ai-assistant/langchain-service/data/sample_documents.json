@@ -1,0 +1,42 @@
+[
+  {
+    "content": "Artificial Intelligence (AI) is a branch of computer science that aims to create intelligent machines capable of performing tasks that typically require human intelligence. These tasks include learning, reasoning, problem-solving, perception, and language understanding.",
+    "metadata": {
+      "title": "Introduction to AI",
+      "category": "technology",
+      "source": "ai_basics"
+    }
+  },
+  {
+    "content": "Machine Learning is a subset of AI that enables computers to learn and improve from experience without being explicitly programmed. It uses algorithms to analyze data, identify patterns, and make predictions or decisions.",
+    "metadata": {
+      "title": "Machine Learning Overview",
+      "category": "technology",
+      "source": "ml_guide"
+    }
+  },
+  {
+    "content": "Natural Language Processing (NLP) is a field of AI that focuses on the interaction between computers and human language. It involves teaching machines to understand, interpret, and generate human language in a valuable way.",
+    "metadata": {
+      "title": "Natural Language Processing",
+      "category": "technology",
+      "source": "nlp_intro"
+    }
+  },
+  {
+    "content": "Vector databases are specialized databases designed to store and query high-dimensional vectors efficiently. They are crucial for AI applications like similarity search, recommendation systems, and retrieval-augmented generation (RAG).",
+    "metadata": {
+      "title": "Vector Databases",
+      "category": "database",
+      "source": "vector_db_guide"
+    }
+  },
+  {
+    "content": "Retrieval-Augmented Generation (RAG) is a technique that combines the power of large language models with external knowledge retrieval. It helps AI systems provide more accurate and up-to-date information by accessing relevant documents from a knowledge base.",
+    "metadata": {
+      "title": "RAG Explained",
+      "category": "ai_technique",
+      "source": "rag_tutorial"
+    }
+  }
+]

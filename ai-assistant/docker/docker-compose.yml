@@ -1,0 +1,98 @@
+version: '3.8'
+
+services:
+  # Qdrant Vector Database
+  qdrant:
+    image: qdrant/qdrant:v1.7.0
+    container_name: ai-assistant-qdrant
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant_storage:/qdrant/storage
+    environment:
+      - QDRANT__SERVICE__HTTP_PORT=6333
+      - QDRANT__SERVICE__GRPC_PORT=6334
+    networks:
+      - ai-assistant-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6333/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # LangChain Service
+  langchain-service:
+    build:
+      context: ../langchain-service
+      dockerfile: Dockerfile
+    container_name: ai-assistant-langchain
+    ports:
+      - "8000:8000"
+    environment:
+      - QDRANT_HOST=qdrant
+      - QDRANT_PORT=6333
+      - QDRANT_COLLECTION_NAME=ai_assistant_docs
+      - LITELLM_MODEL=gpt-3.5-turbo
+      - SERVICE_HOST=0.0.0.0
+      - SERVICE_PORT=8000
+      - EMBEDDING_MODEL=all-MiniLM-L6-v2
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+    depends_on:
+      qdrant:
+        condition: service_healthy
+    networks:
+      - ai-assistant-network
+    volumes:
+      - ../langchain-service:/app
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Spring Boot Backend
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    container_name: ai-assistant-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - LANGCHAIN_SERVICE_URL=http://langchain-service:8000
+    depends_on:
+      langchain-service:
+        condition: service_healthy
+    networks:
+      - ai-assistant-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/chat/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Angular Frontend
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    container_name: ai-assistant-frontend
+    ports:
+      - "4200:4200"
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - ai-assistant-network
+
+volumes:
+  qdrant_storage:
+
+networks:
+  ai-assistant-network:
+    driver: bridge
