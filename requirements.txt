@@ -1,0 +1,32 @@
+# Core LangChain dependencies
+langchain==0.1.0
+langchain-community==0.0.13
+langchain-openai==0.0.5
+
+# Vector database
+qdrant-client==1.7.0
+
+# OpenAI
+openai==1.6.1
+
+# Document processing
+pypdf2==3.0.1
+python-docx==1.1.0
+beautifulsoup4==4.12.2
+requests==2.31.0
+
+# Text processing
+tiktoken==0.5.2
+sentence-transformers==2.2.2
+
+# Environment management
+python-dotenv==1.0.0
+
+# CLI and utilities
+click==8.1.7
+rich==13.7.0
+streamlit==1.29.0
+
+# Data handling
+pandas==2.1.4
+numpy==1.25.2
